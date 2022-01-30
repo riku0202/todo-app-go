@@ -12,20 +12,45 @@ import (
 	"time"
 )
 
-// +---------+--------------+------+-----+---------+-------+
-// | Field   | Type         | Null | Key | Default | Extra |
-// +---------+--------------+------+-----+---------+-------+
-// | id      | varchar(36)  | NO   | PRI | NULL    |       |
-// | todo    | varchar(200) | NO   |     | NULL    |       |
-// | created | datetime     | NO   |     | NULL    |       |
-// | updated | datetime     | NO   |     | NULL    |       |
-// +---------+--------------+------+-----+---------+-------+
+// CREATE TABLE todo_list (
+// id VARCHAR(36) NOT NULL PRIMARY KEY,
+// user_id VARCHAR(36) NOT NULL,
+// title VARCHAR(200) NOT NULL,
+// content VARCHAR(200) NOT NULL,
+// finished BOOLEAN NOT NULL,
+// created_at TIMESTAMP NOT NULL,
+// updated_at TIMESTAMP NOT NULL
+// );
 
 type Todolist struct {
-	Id      string
-	Todo    string
-	Created string
-	Updated string
+	Id        string
+	UserId    string
+	Title     string
+	Content   string
+	Finished  string
+	CreatedAt string
+	UpdatedAt string
+}
+
+func main() {
+	fmt.Println("開始")
+	db, err := initTCPConnectionPool()
+	if err != nil {
+		log.Fatalf("initTCPConnectionPool:%v", err)
+	}
+	fmt.Println("DB接続")
+
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("データベース接続失敗")
+		return
+	} else {
+		fmt.Println("データベース接続成功")
+	}
+
+	http.HandleFunc("/", handler)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func handler(w http.ResponseWriter, req *http.Request) {
@@ -156,27 +181,6 @@ func deleteTodolist(w http.ResponseWriter, r *http.Request, db *sql.DB) error {
 	}
 
 	return nil
-}
-
-func main() {
-	fmt.Println("開始")
-	db, err := initTCPConnectionPool()
-	if err != nil {
-		log.Fatalf("initTCPConnectionPool:%v", err)
-	}
-	fmt.Println("DB接続")
-
-	err = db.Ping()
-	if err != nil {
-		fmt.Println("データベース接続失敗")
-		return
-	} else {
-		fmt.Println("データベース接続成功")
-	}
-
-	http.HandleFunc("/", handler)
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func initTCPConnectionPool() (*sql.DB, error) {
