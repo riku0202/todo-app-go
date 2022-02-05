@@ -7,8 +7,8 @@ import (
 type Repository interface {
 	Create(todo *model.Todo) error
 	Delete(id *model.ID) error
-	UpdateIsFinished(id *model.ID) error
-	FindByUserID(id *model.UserId) (*model.Todo, error)
+	// UpdateIsFinished(id *model.ID) error
+	// FindByUserID(id *model.UserId) (*model.Todo, error)
 }
 
 type App struct {

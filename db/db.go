@@ -1,40 +1,43 @@
-// package db
+package db
 
-// import "os"
+import (
+	"database/sql"
+	"fmt"
+	"sync"
+)
 
-// func init() (*sql.DB, error) {
-// 	var (
-// 		dbUser    = mustGetenv("DB_USER") // e.g. 'my-db-user'
-// 		dbPwd     = mustGetenv("DB_PASS") // e.g. 'my-db-password'
-// 		dbTCPHost = mustGetenv("DB_HOST") // e.g. '127.0.0.1' ('172.17.0.1' if deployed to GAE Flex)
-// 		dbPort    = mustGetenv("DB_PORT") // e.g. '3306'
-// 		dbName    = mustGetenv("DB_NAME") // e.g. 'my-database'
-// 	)
+var (
+	mu   sync.Mutex
+	db   *sql.DB
+	open = func(driverName, dataSourceName string) (*sql.DB, error) {
+		return sql.Open(driverName, dataSourceName)
+	}
+)
 
-// 	dbURI := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", dbUser, dbPwd, dbTCPHost, dbPort, dbName)
+func NewDB(c *Config) (*sql.DB, error) {
+	mu.Lock()
+	defer mu.Unlock()
 
-// 	dbPool, err := sql.Open("mysql", dbURI)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("sql.Open: %v", err)
-// 	}
+	if db != nil {
+		return db, nil
+	}
 
-// 	configureConnectionPool(dbPool)
+	var err error
+	db, err = open(
+		"mysql",
+		fmt.Sprintf(
+			"%s:%s@tcp(%s:%s)/%s",
+			c.EnvKeyDBUserName,
+			c.EnvKeyDBUserPassword,
+			c.EnvKeyDBHost,
+			c.EnvKeyDBPort,
+			c.EnvKeyDBName,
+		),
+	)
 
-// 	return dbPool, nil
-// }
+	if err != nil {
+		return nil, fmt.Errorf("Open関数の呼び出しに失敗しました: %s", err)
+	}
 
-// func configureConnectionPool(dbPool *sql.DB) {
-// 	dbPool.SetMaxIdleConns(5)
-
-// 	dbPool.SetMaxOpenConns(7)
-
-// 	dbPool.SetConnMaxLifetime(1800 * time.Second)
-// }
-
-// func mustGetenv(k string) string {
-// 	v := os.Getenv(k)
-// 	if v == "" {
-// 		log.Fatalf("Warning: %s environment variable not set.\n", k)
-// 	}
-// 	return v
-// }
+	return db, nil
+}

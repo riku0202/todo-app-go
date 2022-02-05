@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/riku0202/todo-app-go/interface/api"
 	"io"
 	"log"
 	"net/http"
@@ -33,60 +34,62 @@ type Todolist struct {
 }
 
 func main() {
-	fmt.Println("開始")
-	db, err := initTCPConnectionPool()
-	if err != nil {
-		log.Fatalf("initTCPConnectionPool:%v", err)
-	}
-	fmt.Println("DB接続")
+	// _, err := di.InitApp()
 
-	err = db.Ping()
-	if err != nil {
-		fmt.Println("データベース接続失敗")
-		return
-	} else {
-		fmt.Println("データベース接続成功")
-	}
+	// fmt.Println("開始")
+	// db, err := initTCPConnectionPool()
+	// if err != nil {
+	// 	log.Fatalf("initTCPConnectionPool:%v", err)
+	// }
+	// fmt.Println("DB接続")
 
-	http.HandleFunc("/", handler)
+	// err = db.Ping()
+	// if err != nil {
+	// 	fmt.Println("データベース接続失敗")
+	// 	return
+	// } else {
+	// 	fmt.Println("データベース接続成功")
+	// }
+
+	http.HandleFunc("/", api.Handler)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func handler(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-	w.Header().Set("Access-Control-Expose-Headers", "Authorization")
+// func handler(w http.ResponseWriter, req *http.Request) {
+// 	w.Header().Set("Access-Control-Allow-Origin", "*")
+// 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+// 	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+// 	w.Header().Set("Access-Control-Expose-Headers", "Authorization")
 
-	db, err := initTCPConnectionPool()
-	if err != nil {
-		log.Fatalf("initTCPConnectionPool:%v", err)
-	}
+// 	db, err := initTCPConnectionPool()
+// 	if err != nil {
+// 		log.Fatalf("initTCPConnectionPool:%v", err)
+// 	}
 
-	switch req.Method {
-	case http.MethodGet:
-		if err := getTodolist(w, req, db); err != nil {
-			log.Fatalf("getTodoList:%v", err)
-		}
+// 	switch req.Method {
+// 	case http.MethodGet:
+// 		if err := getTodolist(w, req, db); err != nil {
+// 			log.Fatalf("getTodoList:%v", err)
+// 		}
 
-	case http.MethodPost:
-		if err := post(w, req, db); err != nil {
-			log.Fatalf("postTodolist:%v", err)
-		}
+// 	case http.MethodPost:
+// 		if err := post(w, req, db); err != nil {
+// 			log.Fatalf("postTodolist:%v", err)
+// 		}
 
-	case http.MethodDelete:
-		if err := delete(w, req, db); err != nil {
-			log.Fatalf("postTodolist:%v", err)
-		}
+// 	case http.MethodDelete:
+// 		if err := delete(w, req, db); err != nil {
+// 			log.Fatalf("postTodolist:%v", err)
+// 		}
 
-	case http.MethodOptions:
-		w.WriteHeader(http.StatusOK)
+// 	case http.MethodOptions:
+// 		w.WriteHeader(http.StatusOK)
 
-	default:
-		http.Error(w, fmt.Sprintf("HTTP Method %s Not Allowed", req.Method), http.StatusMethodNotAllowed)
-	}
-}
+// 	default:
+// 		http.Error(w, fmt.Sprintf("HTTP Method %s Not Allowed", req.Method), http.StatusMethodNotAllowed)
+// 	}
+// }
 
 func post(w http.ResponseWriter, r *http.Request, db *sql.DB) error {
 	if err := postTodolist(w, r, db); err != nil {
@@ -124,10 +127,10 @@ func getTodolist(w http.ResponseWriter, r *http.Request, db *sql.DB) error {
 
 	for sqlRows.Next() {
 		ro := &Todolist{}
-		err := sqlRows.Scan(&ro.Id, &ro.Todo, &ro.Created, &ro.Updated)
-		if err != nil {
-			return fmt.Errorf("Rows.Scan: %v", err)
-		}
+		// err := sqlRows.Scan(&ro.Id, &ro.Todo, &ro.Created, &ro.Updated)
+		// if err != nil {
+		// 	return fmt.Errorf("Rows.Scan: %v", err)
+		// }
 		rows = append(rows, ro)
 	}
 
