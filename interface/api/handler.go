@@ -1,8 +1,8 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -14,28 +14,39 @@ func Handler(w http.ResponseWriter, req *http.Request) {
 
 	switch req.Method {
 	case http.MethodGet:
-		defer req.Body.Close()
 
-		body, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			panic(err)
+		params := req.URL.Query().Get("user_id")
+		if params == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
 		}
 
-		var r FindByUserIDRequest
-
-		r.UserID = string(body)
-
-		res, err := FindByUserID(r)
-		if err != nil {
-			panic(err)
+		req := FindByUserIDRequest{
+			UserID: params,
 		}
 
-		fmt.Println(res)
-		fmt.Println(string(body))
-
-		// if err := getTodolist(w, req, db); err != nil {
-		// 	log.Fatalf("getTodoList:%v", err)
+		_, err := FindByUserID(req)
+		// if err != nil {
+		// 	http.Error(w, fmt.Sprintf("検索に失敗しました: %w", err), 400)
 		// }
+		fmt.Println(err)
+
+		res := Res{
+			ID:          "01",
+			UserId:      "riku0202",
+			Title:       "今日のおかず",
+			Description: "ハンバーグ",
+			IsFinished:  false,
+		}
+
+		json, err := json.Marshal(res)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		w.WriteHeader(200)
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.Write(json)
 
 	// case http.MethodPost:
 	// 	if err := post(w, req, db); err != nil {

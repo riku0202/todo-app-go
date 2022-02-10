@@ -66,7 +66,8 @@ func CreateTodo(req CreateTodoRequest) (Res, error) {
 }
 
 type FindByUserIDRequest struct {
-	UserID string `validate:"required,uuid"`
+	UserID string `json:"user_id"`
+	// validate:"required"
 }
 
 func FindByUserID(req FindByUserIDRequest) (Res, error) {
@@ -81,7 +82,7 @@ func FindByUserID(req FindByUserIDRequest) (Res, error) {
 		return res, fmt.Errorf("クエリーを初期化できません:%v", err)
 	}
 
-	m, err := query.FindByUserID(res.userId)
+	m, err := query.FindByUserID(res.UserId)
 	if err != nil {
 		return res, fmt.Errorf("支払いを取得できませんでした:%v", err)
 	}
@@ -98,10 +99,10 @@ func FindByUserID(req FindByUserIDRequest) (Res, error) {
 
 type Res struct {
 	ID          string
-	userId      string
-	title       string
-	description string
-	isFinished  bool
+	UserId      string
+	Title       string
+	Description string
+	IsFinished  bool
 }
 
 func NewRes(d map[string]interface{}) (Res, error) {
