@@ -1,0 +1,31 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: go-app/DockerFile
+    stdin_open: true
+    tty: true
+    environment:
+      - DB_HOST=127.0.0.1
+      - DB_PORT=3306
+      - DB_NAME=todo_list
+      - DB_USER_NAME=root
+      - DB_USER_PASSWORD=abcd1234
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./go-app:/go/src/app
+    depends_on:
+      - mysql
+
+  mysql:
+    build: ./mysql/
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=abcd1234
+    ports:
+      - "3306:3306"
+    container_name: mysql-container
