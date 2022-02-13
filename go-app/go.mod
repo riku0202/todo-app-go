@@ -7,7 +7,6 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
-	github.com/riku0202/todo-app-go v0.0.0-20220210151625-53751bd1e34b
 )
 
 require (

@@ -35,7 +35,7 @@ func Handler(w http.ResponseWriter, req *http.Request) {
 			ID:          "01",
 			UserId:      "riku0202",
 			Title:       "今日のおかず",
-			Description: "ハンバーグ",
+			Description: "コロッケ",
 			IsFinished:  false,
 		}
 

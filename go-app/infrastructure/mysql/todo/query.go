@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/riku0202/todo-app-go/infrastructure/mysql"
+	"github.com/riku0202/todo-app-go/go-app/infrastructure/mysql"
 )
 
 type Query struct {

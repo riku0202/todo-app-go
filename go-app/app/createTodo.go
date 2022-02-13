@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 
-	"github.com/riku0202/todo-app-go/domain/model"
+	"github.com/riku0202/todo-app-go/go-app/domain/model"
 )
 
 func (app App) CreateTodo(userId string, title string, description string) error {

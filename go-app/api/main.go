@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/riku0202/todo-app-go/interface/api"
+	"github.com/riku0202/todo-app-go/go-app/interface/api"
 	"io"
 	"log"
 	"net/http"

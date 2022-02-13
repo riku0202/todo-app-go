@@ -7,9 +7,9 @@
 package di
 
 import (
-	"github.com/riku0202/todo-app-go/app"
-	"github.com/riku0202/todo-app-go/db"
-	"github.com/riku0202/todo-app-go/infrastructure/mysql/todo"
+	"github.com/riku0202/todo-app-go/go-app/app"
+	"github.com/riku0202/todo-app-go/go-app/db"
+	"github.com/riku0202/todo-app-go/go-app/infrastructure/mysql/todo"
 )
 
 // Injectors from wire.go:

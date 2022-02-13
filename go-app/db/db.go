@@ -23,8 +23,16 @@ func NewDB(c *Config) (*sql.DB, error) {
 	if db != nil {
 		return db, nil
 	}
-	fmt.Printf("Openします")
 	var err error
+	fmt.Printf("Openします")
+	fmt.Printf(
+		"%s:%s@tcp(%s:%s)/%s",
+		c.EnvKeyDBUserName,
+		c.EnvKeyDBUserPassword,
+		c.EnvKeyDBHost,
+		c.EnvKeyDBPort,
+		c.EnvKeyDBName,
+	)
 	db, err = open(
 		"mysql",
 		fmt.Sprintf(
@@ -37,11 +45,11 @@ func NewDB(c *Config) (*sql.DB, error) {
 		),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("Open関数の呼び出しに失敗しましたA: %s", err)
+		return nil, fmt.Errorf("\nOpen関数の呼び出しに失敗しました: %s\n", err)
 	}
 
 	if err := db.Ping(); err != nil {
-		fmt.Printf("Ping関数の呼び出しに失敗しました: %s", err)
+		fmt.Printf("\nPing:%s\n", err)
 	}
 
 	return db, nil

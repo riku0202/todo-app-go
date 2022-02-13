@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/riku0202/todo-app-go/domain/model"
+	"github.com/riku0202/todo-app-go/go-app/domain/model"
 )
 
 type Repository interface {

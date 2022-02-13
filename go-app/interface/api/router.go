@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/riku0202/todo-app-go/infrastructure/di"
+	"github.com/riku0202/todo-app-go/go-app/infrastructure/di"
 )
 
 // func todoHandler(w http.ResponseWriter, req *http.Request) {
@@ -84,7 +84,7 @@ func FindByUserID(req FindByUserIDRequest) (Res, error) {
 
 	m, err := query.FindByUserID(res.UserId)
 	if err != nil {
-		return res, fmt.Errorf("支払いを取得できませんでした:%v", err)
+		return res, fmt.Errorf("Todoを取得できませんでした:%v", err)
 	}
 
 	// res, err = shared.NewCardRes(m)

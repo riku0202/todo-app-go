@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/riku0202/todo-app-go/domain/model"
-	"github.com/riku0202/todo-app-go/infrastructure/mysql"
+	"github.com/riku0202/todo-app-go/go-app/domain/model"
+	"github.com/riku0202/todo-app-go/go-app/infrastructure/mysql"
 )
 
 type Repository struct {
